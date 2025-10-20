@@ -1,0 +1,42 @@
+POST http://localhost:8080/api/users HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Adam ",
+  "email": "adam@example.com",
+  "password": "5321"
+}
+
+###
+
+POST http://localhost:8080/api/users HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Adam 2",
+  "email": "adam2@example.com",
+  "password": "53221"
+}
+
+###
+
+GET http://localhost:8080/api/users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBqdW50b3NhcHAuY29tLmJyIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYwOTI5NTM4LCJleHAiOjE3NjA5MzMxMzh9.H6OGScu-wkAwv8S9qj0UUwO1KfRK8vU-I4XHy7d85ew
+
+###
+POST http://localhost:8080/api/auth/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "adamb@juntosapp.com.br",
+  "password": "1234"
+}
+
+###
+POST http://localhost:8080/api/auth/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "admin@juntosapp.com.br",
+  "password": "1234"
+}

@@ -1,0 +1,45 @@
+package net.ab79.juntos.juntosapp.config;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import net.ab79.juntos.juntosapp.users.domain.model.Role;
+import net.ab79.juntos.juntosapp.users.domain.model.User;
+import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
+
+@Component
+public class DataInitializer implements CommandLineRunner {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public DataInitializer(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        // ADMIN
+        createUserIfNotExists("Admin", "admin@juntosapp.com.br", "1234", Role.ADMIN);
+
+        // USERS
+        createUserIfNotExists("Adam B", "adamb@juntosapp.com.br", "4321", Role.USER);
+        createUserIfNotExists("Adam Bravo", "adambravo@juntosapp.com.br", "4321", Role.USER);
+    }
+
+    private void createUserIfNotExists(String name, String email, String rawPassword, Role role) {
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(rawPassword);
+            User user = new User(UUID.randomUUID(), name, email, encodedPassword, role);
+            userRepository.save(user);
+            System.out.println("Usuário criado: " + email + " [" + role + "]");
+        }
+    }
+
+}

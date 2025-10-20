@@ -1,0 +1,3 @@
+spring:
+  profiles:
+    active: dev # define que estamos no ambiente dev por padrão

@@ -1,0 +1,49 @@
+-- -- ADMIN
+-- INSERT INTO
+--     users (
+--         id,
+--         name,
+--         email,
+--         password,
+--         role
+--     )
+-- VALUES (
+--         RANDOM_UUID (),
+--         'Admin',
+--         'admin@juntosapp.com.br',
+--         '$2a$10$9Uu5T6C.2H4l1GFeQEXdWeVyzIuBQF7G2k0t6x7Qh7f0fYVHv3/k2', -- senha 1234
+--         'ADMIN'
+--     );
+
+-- -- USERS
+-- INSERT INTO
+--     users (
+--         id,
+--         name,
+--         email,
+--         password,
+--         role
+--     )
+-- VALUES (
+--         RANDOM_UUID (),
+--         'Adam B',
+--         'adamb@juntosapp.com.br',
+--         '$2a$10$RZh2EoPtK/7jEx0E8p8qkuZt9b71R0n2vGJwzGgDUEZPmT.WM6fX2', -- senha 4321
+--         'USER'
+--     );
+
+-- INSERT INTO
+--     users (
+--         id,
+--         name,
+--         email,
+--         password,
+--         role
+--     )
+-- VALUES (
+--         RANDOM_UUID (),
+--         'Adam Bravo',
+--         'adambravo@juntosapp.com.br',
+--         '$2a$10$RZh2EoPtK/7jEx0E8p8qkuZt9b71R0n2vGJwzGgDUEZPmT.WM6fX2', -- senha 4321
+--         'USER'
+--     );
