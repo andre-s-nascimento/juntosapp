@@ -99,7 +99,7 @@ src/main/java/net/ab79/juntos/juntosapp/
 │
 ├─ admin
 │ └─ interfaces/controller
-│ └─ AdminController.java # Endpoints administrativos
+│    └─ AdminController.java # Endpoints administrativos
 │
 ├─ auth
 │ ├─ application
@@ -133,6 +133,8 @@ src/main/java/net/ab79/juntos/juntosapp/
 └─ interfaces/controller
 └─ UserController.java # Endpoints CRUD de usuários
 ```
+
+---
 
 ### Tecnologias
 
