@@ -47,4 +47,31 @@ public class UserService {
         .findByEmail(email)
         .orElseThrow(() -> new RuntimeException("Usuario com email: " + email + " não encontrado"));
   }
+
+public User updateUser(UUID id, String name, String email, String password, Role role) {
+    User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    
+    // Verifica se o email já existe em outro usuário
+    if (!existingUser.getEmail().equals(email)) {
+        userRepository.findByEmail(email)
+                .ifPresent(user -> {
+                    if (!user.getId().equals(id)) {
+                        throw new RuntimeException("Email já está em uso");
+                    }
+                });
+    }
+    
+    // CORREÇÃO: Codificar a senha se for fornecida
+    String updatedPassword = existingUser.getPassword(); // mantém a senha atual
+    
+    if (password != null && !password.isBlank() && !password.equals(existingUser.getPassword())) {
+        //  Só codifica se for uma NOVA senha (não igual à atual)
+        updatedPassword = passwordEncoder.encode(password);
+    }
+    
+    User updatedUser = new User(id, name, email, updatedPassword, role);
+    return userRepository.update(updatedUser);
+}
+
 }

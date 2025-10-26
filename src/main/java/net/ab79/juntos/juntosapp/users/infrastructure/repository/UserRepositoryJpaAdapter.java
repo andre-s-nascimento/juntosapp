@@ -51,6 +51,26 @@ public class UserRepositoryJpaAdapter implements UserRepository {
     jpaRepository.deleteById(id);
   }
 
+  @Override
+  public User update(User user){
+    UserEntity entity = jpaRepository.findById(user.getId())
+    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+    //Atualiza apenas os campos permitidos
+    entity.setName(user.getName());
+    entity.setEmail(user.getEmail());
+
+    // Atualiza senha apenas se for fornecida
+    if(user.getPassword() != null && !user.getPassword().isBlank()){
+      entity.setPassword(user.getPassword());
+    }
+
+    entity.setRole(user.getRole());
+
+    UserEntity updated = jpaRepository.save(entity);
+    return new User(updated.getId(), updated.getName(), updated.getEmail(), updated.getPassword(), updated.getRole());
+  }
+
   private User toModel(UserEntity entity) {
     return new User(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword(), entity.getRole());
   }
