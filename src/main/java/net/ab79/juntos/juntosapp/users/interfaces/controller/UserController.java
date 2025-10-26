@@ -6,7 +6,6 @@ import java.util.UUID;
 import net.ab79.juntos.juntosapp.users.application.service.UserService;
 import net.ab79.juntos.juntosapp.users.domain.model.Role;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
-import net.ab79.juntos.juntosapp.users.interfaces.dto.UpdateUserRequest;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,38 +27,60 @@ public class UserController {
 
   @PostMapping
   public User createUser(@RequestBody Map<String, String> body) {
-    return userService.registerUser(body.get("name"), body.get("email"), body.get("password"));
+    String name = body.get("name");
+    String email = body.get("email");
+    String password = body.get("password");
+    
+    // Validação da senha
+    if (password == null || password.isBlank()) {
+        throw new IllegalArgumentException("Senha é obrigatória");
+    }
+    
+    return userService.registerUser(name, email, password);
   }
 
   @PostMapping("/admin")
   @PreAuthorize("hasRole('ADMIN')")
-  public User createAdmin(@RequestBody User user) {
-    return userService.registerAdmin(user.getName(), user.getEmail(), user.getPassword());
+  public User createAdmin(@RequestBody Map<String, String> body) { // ← MUDAR para Map
+    String name = body.get("name");
+    String email = body.get("email");
+    String password = body.get("password");
+    
+    // Validação da senha
+    if (password == null || password.isBlank()) {
+        throw new IllegalArgumentException("Senha é obrigatória para administrador");
+    }
+    
+    return userService.registerAdmin(name, email, password);
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public List<User> listUsers() {
     return userService.listAll();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/id/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public User getUser(@PathVariable UUID id) {
     return userService.getById(id);
   }
 
-  @GetMapping("/{email}")
-  public User getUserByEmail(@PathVariable String email) {
+@GetMapping("/email/{email}")
+  @PreAuthorize("hasRole('ADMIN')")
+public User getUserByEmail(@PathVariable String email) {
     return userService.getByEmail(email);
+}
+
+  @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+  public User updateUser(@PathVariable UUID id, @RequestBody Map<String, String> body) { // ← Usar Map também
+    String name = body.get("name");
+    String email = body.get("email");
+    String password = body.get("password"); // pode ser null
+    Role role = Role.valueOf(body.get("role"));
+    
+    return userService.updateUser(id, name, email, password, role);
   }
 
-@PutMapping("/{id}")
-public User updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequest request) {
-    return userService.updateUser(
-        id, 
-        request.getName(), 
-        request.getEmail(), 
-        request.getPassword(), // pode ser null
-        Role.valueOf(request.getRole())
-    );
-}
 }
