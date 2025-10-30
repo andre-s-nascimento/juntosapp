@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -9,7 +9,7 @@
     <artifactId>juntosapp</artifactId>
     <version>1.0.0</version>
     <name>JuntosApp</name>
-    <description>API do projeto JuntosApp com Spring Boot, JWT, Swagger e Spotless</description>
+    <description>API do projeto JuntosApp com Spring Boot, JWT, Swagger e Lombok</description>
 
     <properties>
         <java.version>25</java.version>
@@ -49,18 +49,18 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.12.5</version>
+            <version>0.11.5</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.12.5</version>
+            <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.5</version>
+            <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -70,7 +70,6 @@
             <artifactId>hibernate-validator</artifactId>
             <version>9.1.0.CR1</version>
         </dependency>
-
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
@@ -92,11 +91,13 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- LOMBOK -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.40</version>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <!-- TESTES -->
@@ -110,6 +111,7 @@
 
     <build>
         <plugins>
+            <!-- COMPILER PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -122,6 +124,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>1.18.40</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -132,42 +135,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
-            </plugin>
-
-            <!-- 🔹 SPOTLESS: FORMATAÇÃO DE CÓDIGO -->
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.43.0</version>
-
-                <configuration>
-                    <java>
-                        <!-- Usa o Google Java Format -->
-                        <googleJavaFormat version="1.17.0" />
-
-                        <!-- Remove imports não usados -->
-                        <removeUnusedImports />
-
-                        <!-- Ordena imports nesta sequência -->
-                        <importOrder>
-                            <order>java</order>
-                            <order>javax</order>
-                            <order>org</order>
-                            <order>springframework</order>
-                            <order>net.ab79</order>
-                        </importOrder>
-                    </java>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>apply</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>
