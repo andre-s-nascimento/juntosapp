@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "Área administrativa — acesso permitido apenas para ADMIN";
-    }
-
+  @GetMapping("/dashboard")
+  public String dashboard() {
+    return "Área administrativa — acesso permitido apenas para ADMIN";
+  }
 }

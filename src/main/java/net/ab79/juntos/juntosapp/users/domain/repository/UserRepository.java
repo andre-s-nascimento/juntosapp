@@ -1,9 +1,10 @@
 package net.ab79.juntos.juntosapp.users.domain.repository;
 
+import net.ab79.juntos.juntosapp.users.domain.model.User;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import net.ab79.juntos.juntosapp.users.domain.model.User;
 
 public interface UserRepository {
   User save(User user);

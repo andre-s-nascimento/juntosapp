@@ -1,18 +1,15 @@
 package net.ab79.juntos.juntosapp.users.domain.model;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.util.UUID;
 
 public class User {
   private UUID id;
   private String name;
   private String email;
-  @JsonIgnore
-  private String password;
+  @JsonIgnore private String password;
 
   @Enumerated(EnumType.STRING)
   private Role role;
@@ -54,8 +51,7 @@ public class User {
   }
 
   public void updateName(String name) {
-    if (name == null || name.isBlank())
-      throw new IllegalArgumentException("Nome Inválido");
+    if (name == null || name.isBlank()) throw new IllegalArgumentException("Nome Inválido");
 
     this.name = name;
   }

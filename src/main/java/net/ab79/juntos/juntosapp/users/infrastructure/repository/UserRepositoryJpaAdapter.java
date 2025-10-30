@@ -1,14 +1,13 @@
 package net.ab79.juntos.juntosapp.users.infrastructure.repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Repository;
-
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
 import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryJpaAdapter implements UserRepository {
@@ -38,10 +37,7 @@ public class UserRepositoryJpaAdapter implements UserRepository {
 
   @Override
   public List<User> findAll() {
-    return jpaRepository.findAll()
-        .stream()
-        .map(this::toModel)
-        .toList();
+    return jpaRepository.findAll().stream().map(this::toModel).toList();
   }
 
   @Override
@@ -54,8 +50,10 @@ public class UserRepositoryJpaAdapter implements UserRepository {
 
   @Override
   public User update(User user) {
-    UserEntity entity = jpaRepository.findById(user.getId())
-        .orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + user.getId()));
+    UserEntity entity =
+        jpaRepository
+            .findById(user.getId())
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + user.getId()));
 
     // Atualiza apenas campos válidos
     if (user.getName() != null && !user.getName().isBlank()) {
@@ -84,8 +82,7 @@ public class UserRepositoryJpaAdapter implements UserRepository {
         entity.getName(),
         entity.getEmail(),
         entity.getPassword(),
-        entity.getRole()
-    );
+        entity.getRole());
   }
 
   private UserEntity toEntity(User user) {
