@@ -1,10 +1,9 @@
 package net.ab79.juntos.juntosapp.config;
 
+import java.util.Optional;
 import net.ab79.juntos.juntosapp.users.domain.model.Role;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
-
-import java.util.Optional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,6 @@ package net.ab79.juntos.juntosapp.auth.application;
 
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

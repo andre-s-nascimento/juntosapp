@@ -1,15 +1,14 @@
 package net.ab79.juntos.juntosapp.users.interfaces.controller;
 
-import net.ab79.juntos.juntosapp.users.application.service.UserService;
-import net.ab79.juntos.juntosapp.users.domain.model.Role;
-import net.ab79.juntos.juntosapp.users.domain.model.User;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.ab79.juntos.juntosapp.users.application.service.UserService;
+import net.ab79.juntos.juntosapp.users.domain.model.Role;
+import net.ab79.juntos.juntosapp.users.domain.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

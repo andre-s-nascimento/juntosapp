@@ -1,9 +1,8 @@
 package net.ab79.juntos.juntosapp.users.infrastructure.repository;
 
-import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
-
 import java.util.Optional;
 import java.util.UUID;
+import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

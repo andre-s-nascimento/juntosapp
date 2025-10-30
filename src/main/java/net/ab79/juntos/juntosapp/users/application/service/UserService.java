@@ -1,11 +1,10 @@
 package net.ab79.juntos.juntosapp.users.application.service;
 
+import java.util.List;
+import java.util.UUID;
 import net.ab79.juntos.juntosapp.users.domain.model.Role;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
-
-import java.util.List;
-import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

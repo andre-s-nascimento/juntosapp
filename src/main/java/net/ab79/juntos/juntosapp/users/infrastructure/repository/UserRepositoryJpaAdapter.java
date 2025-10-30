@@ -1,12 +1,11 @@
 package net.ab79.juntos.juntosapp.users.infrastructure.repository;
 
-import net.ab79.juntos.juntosapp.users.domain.model.User;
-import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
-import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import net.ab79.juntos.juntosapp.users.domain.model.User;
+import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
+import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

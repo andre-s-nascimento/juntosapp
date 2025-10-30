@@ -1,8 +1,7 @@
 package net.ab79.juntos.juntosapp.config;
 
-import net.ab79.juntos.juntosapp.auth.infrastructure.JwtAuthenticationFilter;
-
 import java.util.List;
+import net.ab79.juntos.juntosapp.auth.infrastructure.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
