@@ -58,23 +58,29 @@ public class SecurityConfig {
 
                 // permitir H2 console e endpoints públicos
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
-                        .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(
+                    "/h2-console/**",
+                    "/api/auth/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                .requestMatchers("/api/users/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
 
                 // H2 console usa frames, precisamos permitir
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin()))
 
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // JWT filter
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
                 // Desativa autenticação de formulário do Spring Security (não precisamos pro H2
                 // console)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
 
                 // Desativa logout automático (não usado no H2 console)

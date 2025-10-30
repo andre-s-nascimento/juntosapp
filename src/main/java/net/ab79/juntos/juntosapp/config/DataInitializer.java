@@ -36,7 +36,7 @@ public class DataInitializer implements CommandLineRunner {
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isEmpty()) {
             String encodedPassword = passwordEncoder.encode(rawPassword);
-            User user = new User(UUID.randomUUID(), name, email, encodedPassword, role);
+            User user = new User(null, name, email, encodedPassword, role);
             userRepository.save(user);
             System.out.println("Usuário criado: " + email + " [" + role + "]");
         }

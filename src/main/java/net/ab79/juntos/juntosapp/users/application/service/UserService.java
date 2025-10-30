@@ -20,17 +20,25 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public User registerUser(String name, String email, String password) {
-    String encodedPassword = passwordEncoder.encode(password);
-    User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.USER);
-    return userRepository.save(user);
-  }
+    public User registerUser(String name, String email, String password) {
+        userRepository.findByEmail(email).ifPresent(u -> {
+            throw new RuntimeException("Email já cadastrado: " + email);
+        });
 
-  public User registerAdmin(String name, String email, String password) {
-    String encodedPassword = passwordEncoder.encode(password);
-    User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.ADMIN);
-    return userRepository.save(user);
-  }
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.USER);
+        return userRepository.save(user);
+    }
+
+    public User registerAdmin(String name, String email, String password) {
+        userRepository.findByEmail(email).ifPresent(u -> {
+            throw new RuntimeException("Email já cadastrado: " + email);
+        });
+
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.ADMIN);
+        return userRepository.save(user);
+    }
 
   public List<User> listAll() {
     return userRepository.findAll();
@@ -49,29 +57,45 @@ public class UserService {
   }
 
 public User updateUser(UUID id, String name, String email, String password, Role role) {
-    User existingUser = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-    
-    // Verifica se o email já existe em outro usuário
-    if (!existingUser.getEmail().equals(email)) {
-        userRepository.findByEmail(email)
-                .ifPresent(user -> {
-                    if (!user.getId().equals(id)) {
-                        throw new RuntimeException("Email já está em uso");
-                    }
-                });
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+
+        // Verifica se o novo email pertence a outro usuário
+        if (!existingUser.getEmail().equalsIgnoreCase(email)) {
+            userRepository.findByEmail(email)
+                    .ifPresent(user -> {
+                        if (!user.getId().equals(id)) {
+                            throw new RuntimeException("Email já está em uso: " + email);
+                        }
+                    });
+        }
+
+        // Atualiza dados
+        String updatedPassword = existingUser.getPassword();
+        if (password != null && !password.isBlank()) {
+            updatedPassword = passwordEncoder.encode(password);
+        }
+
+        Role updatedRole = (role != null) ? role : existingUser.getRole();
+
+        User updatedUser = new User(
+                existingUser.getId(),
+                name != null ? name : existingUser.getName(),
+                email != null ? email : existingUser.getEmail(),
+                updatedPassword,
+                updatedRole
+        );
+
+        // O JPA faz o update automaticamente com o save()
+        return userRepository.save(updatedUser);
     }
-    
-    // CORREÇÃO: Codificar a senha se for fornecida
-    String updatedPassword = existingUser.getPassword(); // mantém a senha atual
-    
-    if (password != null && !password.isBlank() && !password.equals(existingUser.getPassword())) {
-        //  Só codifica se for uma NOVA senha (não igual à atual)
-        updatedPassword = passwordEncoder.encode(password);
+
+  
+    public void deleteUser(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+
+        userRepository.delete(user.getId());
     }
-    
-    User updatedUser = new User(id, name, email, updatedPassword, role);
-    return userRepository.update(updatedUser);
-}
 
 }

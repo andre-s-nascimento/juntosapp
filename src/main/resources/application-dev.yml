@@ -10,6 +10,7 @@ spring:
     console:
       enabled: true
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
     show-sql: true
