@@ -1,6 +1,7 @@
 package net.ab79.juntos.juntosapp.config;
 
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import net.ab79.juntos.juntosapp.users.domain.model.Role;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class DataInitializer implements CommandLineRunner {
 
   private final UserRepository userRepository;
@@ -35,7 +37,7 @@ public class DataInitializer implements CommandLineRunner {
       String encodedPassword = passwordEncoder.encode(rawPassword);
       User user = new User(null, name, email, encodedPassword, role);
       userRepository.save(user);
-      System.out.println("Usuário criado: " + email + " [" + role + "]");
+      log.info("Usuário criado: " + email + " [" + role + "]");
     }
   }
 }
