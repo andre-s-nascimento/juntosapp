@@ -2,6 +2,8 @@ package net.ab79.juntos.juntosapp.users.application.service;
 
 import java.util.List;
 import java.util.UUID;
+import net.ab79.juntos.juntosapp.users.domain.exception.EmailAlreadyExistsException;
+import net.ab79.juntos.juntosapp.users.domain.exception.UserNotFoundException;
 import net.ab79.juntos.juntosapp.users.domain.model.Role;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
@@ -19,28 +21,22 @@ public class UserService {
   }
 
   public User registerUser(String name, String email, String password) {
-    userRepository
-        .findByEmail(email)
-        .ifPresent(
-            u -> {
-              throw new RuntimeException("Email já cadastrado: " + email);
-            });
+    if (userRepository.findByEmail(email).isPresent()) {
+      throw new EmailAlreadyExistsException("Email " + email + " já cadastrado");
+    }
 
     String encodedPassword = passwordEncoder.encode(password);
-    User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.USER);
+    User user = new User(null, name, email, encodedPassword, Role.USER);
     return userRepository.save(user);
   }
 
   public User registerAdmin(String name, String email, String password) {
-    userRepository
-        .findByEmail(email)
-        .ifPresent(
-            u -> {
-              throw new RuntimeException("Email já cadastrado: " + email);
-            });
+    if (userRepository.findByEmail(email).isPresent()) {
+      throw new EmailAlreadyExistsException("Email " + email + " já cadastrado");
+    }
 
     String encodedPassword = passwordEncoder.encode(password);
-    User user = new User(UUID.randomUUID(), name, email, encodedPassword, Role.ADMIN);
+    User user = new User(null, name, email, encodedPassword, Role.ADMIN);
     return userRepository.save(user);
   }
 
@@ -51,20 +47,20 @@ public class UserService {
   public User getById(UUID id) {
     return userRepository
         .findById(id)
-        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
   }
 
   public User getByEmail(String email) {
     return userRepository
         .findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("Usuario com email: " + email + " não encontrado"));
+        .orElseThrow(() -> new UserNotFoundException("Usuário com email informado não encontrado"));
   }
 
   public User updateUser(UUID id, String name, String email, String password, Role role) {
     User existingUser =
         userRepository
             .findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com ID: " + id));
 
     // Verifica se o novo email pertence a outro usuário
     if (!existingUser.getEmail().equalsIgnoreCase(email)) {
@@ -73,7 +69,7 @@ public class UserService {
           .ifPresent(
               user -> {
                 if (!user.getId().equals(id)) {
-                  throw new RuntimeException("Email já está em uso: " + email);
+                  throw new EmailAlreadyExistsException(email);
                 }
               });
     }
@@ -102,7 +98,7 @@ public class UserService {
     User user =
         userRepository
             .findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com ID: " + id));
 
     userRepository.delete(user.getId());
   }

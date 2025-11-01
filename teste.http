@@ -3,7 +3,7 @@ content-type: application/json
 
 {
   "name": "Adam ",
-  "email": "adam@example.com",
+  "email": "adam@example2.com",
   "password": "5321"
 }
 
@@ -21,7 +21,7 @@ content-type: application/json
 ###
 
 GET http://localhost:8080/api/users HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBqdW50b3NhcHAuY29tLmJyIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYxNzAzMjUxLCJleHAiOjE3NjE3MDY4NTF9.BZ9cfY5GmTve84ddsnfoGUhTZPWWnvjgFGjymlWXmhQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBqdW50b3NhcHAuY29tLmJyIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYxODcxNDk3LCJleHAiOjE3NjE4NzUwOTd9.eWEWkLG3J4HeeiU7mOWDh_GHnXlkDQlHhIWxak_JWbc
 ###
 POST http://localhost:8080/api/auth/login HTTP/1.1
 content-type: application/json
@@ -39,6 +39,10 @@ content-type: application/json
   "email": "admin@juntosapp.com.br",
   "password": "1234"
 }
+
+###
+GET http://localhost:8080/api/users/email/adambravo79.games%40gmail.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBqdW50b3NhcHAuY29tLmJyIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYxOTYzNzM2LCJleHAiOjE3NjE5NjczMzZ9.QbaX8vOgr3Ld-VcCHupqMPBY7fjZzuQmBEfW_cElOM4
 
 ###
 DELETE http://localhost:8080/api/users/d1832962-30ae-4842-a60f-715e349ec30d HTTP/1.1

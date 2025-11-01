@@ -7,8 +7,10 @@ import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
 import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class UserRepositoryJpaAdapter implements UserRepository {
 
   private final UserJpaRepository jpaRepository;
@@ -19,8 +21,15 @@ public class UserRepositoryJpaAdapter implements UserRepository {
 
   @Override
   public User save(User user) {
+    // 🔹 Evita o erro de "merge" quando o ID já vem preenchido
     UserEntity entity = toEntity(user);
-    UserEntity saved = jpaRepository.save(entity);
+
+    // Se o ID estiver setado mas não existir no banco, zera o ID para forçar INSERT
+    if (entity.getId() != null && !jpaRepository.existsById(entity.getId())) {
+      entity.setId(null);
+    }
+
+    UserEntity saved = jpaRepository.saveAndFlush(entity);
     return toModel(saved);
   }
 
@@ -54,24 +63,20 @@ public class UserRepositoryJpaAdapter implements UserRepository {
             .findById(user.getId())
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + user.getId()));
 
-    // Atualiza apenas campos válidos
     if (user.getName() != null && !user.getName().isBlank()) {
       entity.setName(user.getName());
     }
-
     if (user.getEmail() != null && !user.getEmail().isBlank()) {
       entity.setEmail(user.getEmail());
     }
-
     if (user.getPassword() != null && !user.getPassword().isBlank()) {
       entity.setPassword(user.getPassword());
     }
-
     if (user.getRole() != null) {
       entity.setRole(user.getRole());
     }
 
-    UserEntity updated = jpaRepository.save(entity);
+    UserEntity updated = jpaRepository.saveAndFlush(entity);
     return toModel(updated);
   }
 
