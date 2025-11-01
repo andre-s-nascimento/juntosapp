@@ -3,6 +3,7 @@ package net.ab79.juntos.juntosapp.users.infrastructure.repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import net.ab79.juntos.juntosapp.users.domain.exception.UserNotFoundException;
 import net.ab79.juntos.juntosapp.users.domain.model.User;
 import net.ab79.juntos.juntosapp.users.domain.repository.UserRepository;
 import net.ab79.juntos.juntosapp.users.infrastructure.entity.UserEntity;
@@ -51,7 +52,7 @@ public class UserRepositoryJpaAdapter implements UserRepository {
   @Override
   public void delete(UUID id) {
     if (!jpaRepository.existsById(id)) {
-      throw new RuntimeException("Usuário não encontrado para exclusão: " + id);
+      throw new UserNotFoundException("Usuário não encontrado para exclusão: " + id);
     }
     jpaRepository.deleteById(id);
   }

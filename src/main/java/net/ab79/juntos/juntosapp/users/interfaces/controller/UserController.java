@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
     description = "Gerenciamento de usuários (CRUD) com controle de acesso por papéis.")
 public class UserController {
 
+  private static final String PASSWORD = "password";
+  private static final String EMAIL = "email";
+  private static final String NAME = "name";
   private final UserService userService;
 
   public UserController(UserService userService) {
@@ -57,9 +60,9 @@ public class UserController {
       })
   @PostMapping
   public ResponseEntity<User> createUser(@RequestBody Map<String, String> body) {
-    String name = body.get("name");
-    String email = body.get("email");
-    String password = body.get("password");
+    String name = body.get(NAME);
+    String email = body.get(EMAIL);
+    String password = body.get(PASSWORD);
 
     if (password == null || password.isBlank()) {
       return ResponseEntity.badRequest().build();
@@ -111,9 +114,9 @@ public class UserController {
   @PostMapping("/admin")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<User> createAdmin(@RequestBody Map<String, String> body) {
-    String name = body.get("name");
-    String email = body.get("email");
-    String password = body.get("password");
+    String name = body.get(NAME);
+    String email = body.get(EMAIL);
+    String password = body.get(PASSWORD);
 
     if (password == null || password.isBlank()) {
       return ResponseEntity.badRequest().build();
@@ -209,7 +212,7 @@ public class UserController {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<User> getUserByEmail(
       @Parameter(description = "E-mail do usuário a ser buscado", required = true)
-          @PathVariable("email")
+          @PathVariable(EMAIL)
           String email) {
 
     User user = userService.getByEmail(email);
@@ -258,16 +261,16 @@ public class UserController {
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<User> updateUser(
       @PathVariable UUID id, @RequestBody Map<String, String> body) {
-    String name = body.get("name");
-    String email = body.get("email");
-    String password = body.get("password");
+    String name = body.get(NAME);
+    String email = body.get(EMAIL);
+    String password = body.get(PASSWORD);
     String roleStr = body.get("role");
 
     Role role = null;
     if (roleStr != null && !roleStr.isBlank()) {
       try {
         role = Role.valueOf(roleStr.toUpperCase());
-      } catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException _) {
         throw new IllegalArgumentException("Papel inválido: " + roleStr);
       }
     }
