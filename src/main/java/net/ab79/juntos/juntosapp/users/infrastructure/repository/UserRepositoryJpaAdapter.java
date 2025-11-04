@@ -1,9 +1,11 @@
 package net.ab79.juntos.juntosapp.users.infrastructure.repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,31 +20,35 @@ public class UserRepositoryJpaAdapter implements UserRepository {
 
     private final UserJpaRepository jpaRepository;
 
-    public UserRepositoryJpaAdapter(UserJpaRepository jpaRepository) {
-        this.jpaRepository = jpaRepository;
+    public UserRepositoryJpaAdapter(@NonNull UserJpaRepository jpaRepository) {
+        this.jpaRepository = Objects.requireNonNull(jpaRepository, "UserJpaRepository não pode ser nulo");
     }
 
-    @Override
-    public User save(User user) {
-        // 🔹 Evita o erro de "merge" quando o ID já vem preenchido
-        UserEntity entity = toEntity(user);
+  @Override
+public User save(User user) {
+    Objects.requireNonNull(user, "User não pode ser nulo");
+    
+    UserEntity entity = toEntity(user);
 
-        // Se o ID estiver setado mas não existir no banco, zera o ID para forçar INSERT
-        if (entity.getId() != null && !jpaRepository.existsById(entity.getId())) {
-            entity.setId(null);
-        }
-
-        UserEntity saved = jpaRepository.saveAndFlush(entity);
-        return toModel(saved);
+    // 🔹 SOLUÇÃO: Verificar se o ID não é nulo ANTES de usar existsById
+    UUID entityId = entity.getId();
+    if (entityId != null && !jpaRepository.existsById(entityId)) {
+        entity.setId(null);
     }
+
+    UserEntity saved = jpaRepository.saveAndFlush(entity);
+    return toModel(saved);
+}
 
     @Override
     public Optional<User> findById(UUID id) {
+        Objects.requireNonNull(id, "ID não pode ser nulo");
         return jpaRepository.findById(id).map(this::toModel);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
+        Objects.requireNonNull(email, "Email não pode ser nulo");
         return jpaRepository.findByEmail(email).map(this::toModel);
     }
 
@@ -53,6 +59,8 @@ public class UserRepositoryJpaAdapter implements UserRepository {
 
     @Override
     public void delete(UUID id) {
+        Objects.requireNonNull(id, "ID não pode ser nulo");
+        
         if (!jpaRepository.existsById(id)) {
             throw new UserNotFoundException("Usuário não encontrado para exclusão: " + id);
         }
@@ -60,10 +68,14 @@ public class UserRepositoryJpaAdapter implements UserRepository {
     }
 
     @Override
+    @SuppressWarnings("null")
     public User update(User user) {
+        Objects.requireNonNull(user, "User não pode ser nulo");
+        Objects.requireNonNull(user.getId(), "User ID não pode ser nulo");
+
         UserEntity entity = jpaRepository
                 .findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + user.getId()));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado: " + user.getId()));
 
         if (user.getName() != null && !user.getName().isBlank()) {
             entity.setName(user.getName());
@@ -83,10 +95,20 @@ public class UserRepositoryJpaAdapter implements UserRepository {
     }
 
     private User toModel(UserEntity entity) {
-        return new User(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword(), entity.getRole());
+        Objects.requireNonNull(entity, "UserEntity não pode ser nulo");
+        
+        return new User(
+            entity.getId(), 
+            entity.getName(), 
+            entity.getEmail(), 
+            entity.getPassword(), 
+            entity.getRole()
+        );
     }
 
     private UserEntity toEntity(User user) {
+        Objects.requireNonNull(user, "User não pode ser nulo");
+        
         UserEntity entity = new UserEntity();
         entity.setId(user.getId());
         entity.setName(user.getName());
