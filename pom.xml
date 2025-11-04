@@ -151,28 +151,25 @@
                 <version>${spring.boot.version}</version>
             </plugin>
 
-            <!-- SPOTLESS -->
+            <!-- SPOTLESS
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${spotless.version}</version>
-                <configuration>
-                    <java>
-                        <googleJavaFormat>
-                            <version>${google-java-format.version}</version>
-                        </googleJavaFormat>
-                        <removeUnusedImports />
-                        <importOrder>
-                            <order>
-                                net.ab79
-                                java
-                                javax
-                                org
-                                org.springframework
-                            </order>
-                        </importOrder>
-                    </java>
-                </configuration>
+                  <configuration>
+        <java>
+            <toggleOffOn />
+            <cleanthat />
+            <palantirJavaFormat>
+                <version>2.38.0</version>
+            </palantirJavaFormat>
+            <importOrder>
+                <order>java,javax,org,com,net.ab79</order>
+            </importOrder>
+            <removeUnusedImports />
+            <formatAnnotations />
+        </java>
+    </configuration>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -183,6 +180,27 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-toolchains-plugin</artifactId>
+  <version>3.1.0</version>
+  <executions>
+    <execution>
+      <goals>
+        <goal>toolchain</goal>
+      </goals>
+    </execution>
+  </executions>
+  <configuration>
+    <toolchains>
+      <jdk>
+        <version>21</version>
+      </jdk>
+    </toolchains>
+  </configuration>
+</plugin> -->
+
 
         </plugins>
     </build>
